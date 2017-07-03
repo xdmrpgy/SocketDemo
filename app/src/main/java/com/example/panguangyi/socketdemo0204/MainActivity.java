@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
         if (mClient != null) {
             try {
                 mClient.shutdownInput();
@@ -104,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        Intent service = new Intent(this,TCPServerService.class);
+        service.setAction(TCPServerService.ACTION_START_SERVER);
+        stopService(service);
+        Log.d(TAG,"[MainActivity] onDestroy");
         super.onDestroy();
     }
 

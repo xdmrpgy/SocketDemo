@@ -25,6 +25,7 @@ public class TCPServerService extends IntentService {
     private static final String TAG = "TCPServerService";
     public static final String ACTION_START_SERVER = "ACTION_START_SERVER";
     private boolean isServiceDestroyed = false;
+    private ServerSocket serverSocket = null;
     private String[] defaultResponseMessages = new String[] {
             "Hello,guys!",
             "Nice to meet you!",
@@ -46,6 +47,13 @@ public class TCPServerService extends IntentService {
     public void onDestroy() {
         Log.d(TAG,"[TCPServerService] onDestroy");
         isServiceDestroyed = true;
+        if (serverSocket != null) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         super.onDestroy();
     }
 
@@ -61,7 +69,6 @@ public class TCPServerService extends IntentService {
     }
 
     private void handleActionStartServer() {
-        ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(8688);
         } catch (IOException e) {
